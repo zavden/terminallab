@@ -1,0 +1,7 @@
+# Netlify response headers. The meta CSP in index.html still applies; these add
+# protections that a meta tag cannot provide. No build step is needed.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"

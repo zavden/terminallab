@@ -204,6 +204,22 @@ The standalone is HTML with embedded CSS/JavaScript; it retains all interactive 
 
 For the modular distribution, publish the original assets, `python-runtime.js`, `vendor/pyodide/`, and `.nojekyll`. For the single-file distribution, publish/copy `standalone/index.html` as the entry HTML. Production does not need tests, docs, Node modules, or the build script.
 
+Upload only those files when copying to a server manually or by FTP. Copying the whole working folder can expose `.git/` (including commit author emails), `node_modules/` and test results. GitHub Pages does not serve `.git/`.
+
+The meta CSP travels with the files, but browsers ignore `frame-ancestors` in a meta tag, and GitHub Pages does not allow custom response headers. Where a host allows them (for example a `_headers` file or server configuration), add:
+
+```text
+Content-Security-Policy: frame-ancestors 'self'
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+```
+
+To embed the lab in a learning platform, list that platform's origin in `frame-ancestors` instead of only `'self'`. A header CSP adds to the meta policy; it cannot loosen it.
+
+The Netlify deployment uses `netlify.toml`, which sets `X-Content-Type-Options` and `Referrer-Policy`. It omits `frame-ancestors` until the embedding platforms are known. On the free plan, Netlify adds a promotional comment and a badge script (`/.netlify/scripts/hud`) to the served `index.html`. The page CSP blocks the badge's inline style and script, which leaves its iframe clipped to nothing and lets clicks through, and the console shows two CSP errors. Leave the CSP as it is; allowing `unsafe-inline` to show the badge would weaken the protection.
+
+Saved practice lives in `localStorage` for the page's origin. Project sites under one `username.github.io` share that origin, so other pages there can read or change the saved practice. The loader validates saved data and renders it as text, so tampered storage cannot run code. A custom domain keeps the data separate.
+
 The README contains the GitHub Pages setup instructions. There is no project-provided remote, CI pipeline, or deployment credential. Do not confuse a successful local build with a deployed site.
 
 When handing off a change, state what changed, what verification actually ran, any relevant limitation, and whether standalone was regenerated. Keep the documentation aligned with actual supported behavior instead of documenting unimplemented native-shell features.

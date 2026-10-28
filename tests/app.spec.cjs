@@ -202,6 +202,24 @@ test("desktop visual states and no client errors", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test("repository note opens GitHub safely and the footer shows credits", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const repo = page.getByRole("link", {
+    name: "github.com/zavden/terminallab",
+  });
+  await expect(repo).toHaveAttribute(
+    "href",
+    "https://github.com/zavden/terminallab",
+  );
+  await expect(repo).toHaveAttribute("target", "_blank");
+  await expect(repo).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(page.locator(".site-credit")).toContainText(
+    "Reviewed and fixed by Claude Opus 5.5",
+  );
+});
+
 test("accessibility: both systems and themes, plus guide dialog", async ({
   page,
 }) => {

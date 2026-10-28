@@ -287,6 +287,13 @@ h1 > span {
   color: var(--muted);
   line-height: 1.7;
 }
+.intro .repo-note {
+  margin-top: 4px;
+  font-size: 12px;
+}
+.repo-note code {
+  font-size: 11px;
+}
 .platform-picker {
   display: flex;
   background: var(--surface-alt);
@@ -1137,9 +1144,13 @@ kbd {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 20px;
   font-size: 9px;
   color: var(--muted);
+}
+.site-credit {
+  flex-basis: 100%;
 }
 .site-footer > div {
   display: flex;

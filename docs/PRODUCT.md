@@ -22,6 +22,8 @@ The app simulates a small useful subset of zsh and Windows PowerShell. It does n
 | Navigation    | Terminal and explorer always share the same current folder within a platform session.                                                              |
 | Sessions      | macOS and Windows each keep independent files, location, and command history.                                                                      |
 | Guidance      | A searchable header command guide compares both platforms and prepares a command without executing it.                                             |
+| Repository    | The intro links to `github.com/zavden/terminallab` for learners who want to download the lab and test it locally. Opens in a new tab.          |
+| Credits       | The page footer ends with: Created with Codex Astra/Sol 6.1 · Reviewed and fixed by Claude Opus 5.5.                                             |
 | Removed UI    | No guided lesson cards, free-practice mode selector, or quick-command cards below the workspace.                                                   |
 | Deployment    | Modular static files and a self-contained single-HTML distribution. Both work without a server.                                                    |
 

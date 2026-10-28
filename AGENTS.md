@@ -21,6 +21,7 @@ Read the sections relevant to the change; there is no need to reread every docum
 - Production has no server, API, account, network requirement, build requirement, or externally downloaded runtime dependency.
 - The app must work by opening an HTML file with `file://`, and on static hosting under a repository subpath.
 - The maintained source is `index.html`, `styles.css`, `engine.js`, `app.js`, and `favicon.svg`.
+- `netlify.toml` only adds response headers for the Netlify deployment (https://terminal-lab.netlify.app/); it has no build step.
 - `standalone/index.html` is generated. Do not edit it directly. Keep `standalone/` limited to the single self-contained HTML deliverable.
 - Use classic browser scripts. Introducing module imports, fetches, external fonts, or CDNs can break direct-file operation or offline use.
 - Keep the UI, reference, messages, and stock file contents in English. The simulated user is `user`.
@@ -36,6 +37,7 @@ Read the sections relevant to the change; there is no need to reread every docum
 - `cd` changes the explorer location. GUI navigation updates the prompt and logs the equivalent `cd`.
 - Opening text shows an auto-saving editor window over 95% of `.explorer-pane`, covering its title bar, path bar and sidebar. The underlying explorer is inert while covered; minimizing or closing reveals it again.
 - Window controls are functional: close, minimize/restore, and maximize/restore within the entire right pane. macOS controls are on the left; Windows controls are on the right.
+- The intro links to the GitHub repository for local testing; the footer ends with the creation/review credit line.
 - Do not reintroduce the removed guided-learning section, free-practice switch, or quick-command cards unless requested. The header's searchable command guide remains available.
 
 ## Implementation conventions

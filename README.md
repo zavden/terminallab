@@ -97,7 +97,7 @@ Quote names containing spaces: `mkdir "My ideas"`.
 
 This is an educational simulator. Commands only transform data held in memory and browser storage. They cannot access real files, processes, accounts, credentials, or the network.
 
-- Python executes only in a disposable browser worker. JavaScript eval is blocked by CSP; user text is rendered with `textContent` or textarea `.value`.
+- Python executes only in a disposable browser worker. JavaScript eval is blocked by CSP; user text is rendered with `textContent` or textarea `.value`. Python gets no JavaScript globals, and the worker removes `XMLHttpRequest`, `WebSocket` and `indexedDB` before learner code runs, so blocking the network does not depend on CSP alone.
 - Pyodide is bundled locally; no CDNs, external fonts, analytics, or background network requests. Documentation links are visited only when clicked.
 - A Content Security Policy limits scripts and resources to this site and blocks connections, objects, and form submission.
 - Limits: 700 items, 40 folder levels, 100,000 characters per file, 750,000 total path/content characters, and 4096 characters per command.
@@ -106,6 +106,7 @@ This is an educational simulator. Commands only transform data held in memory an
 - Windows commands and paths are case-insensitive; this lab’s macOS mode is case-sensitive. On real Macs, file name sensitivity depends on the disk format.
 - The GUI always displays hidden files for learning; `ls` hides them until the appropriate option is used.
 - `rm` only removes virtual data here. In a real terminal, it can delete files permanently.
+- Practice is saved in this browser for this site. On a shared computer, it stays for the next person using the same browser profile until each system is reset or the site data is cleared. Do not keep personal information in practice files.
 
 Command references: [PowerShell Management](https://learn.microsoft.com/powershell/module/microsoft.powershell.management/), [New-Item](https://learn.microsoft.com/powershell/module/microsoft.powershell.management/new-item), and [the zsh manual](https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html).
 
@@ -116,9 +117,13 @@ Command references: [PowerShell Management](https://learn.microsoft.com/powershe
 3. Set **Source** to **Deploy from a branch**.
 4. Select the branch containing the files and **/(root)**, then save.
 
-No build command is needed. All asset paths are relative, including when hosted under a repository path such as `https://username.github.io/terminal-lab/`. `.nojekyll` skips Jekyll processing. Tests, screenshots, and `node_modules` are not required for hosting.
+No build command is needed. All asset paths are relative, including when hosted under a repository path such as `https://username.github.io/terminal-lab/`. `.nojekyll` skips Jekyll processing. Tests, screenshots, and `node_modules` are not required for hosting. On hosts that allow response headers, see [Delivery and hosting](docs/DEVELOPMENT.md#delivery-and-hosting) for recommended security headers and upload precautions.
 
 References: [Configure a Pages publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) and [create a Pages site](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site). The same files work with other static hosting providers. No remote repository or deployment is created by this project.
+
+### Netlify
+
+The published lab, https://terminal-lab.netlify.app/, deploys this repository on Netlify without a build command. `netlify.toml` adds security response headers. Learners can also download the repository from https://github.com/zavden/terminallab and open `index.html` locally. See [Delivery and hosting](docs/DEVELOPMENT.md#delivery-and-hosting) for the badge Netlify adds on the free plan.
 
 ## Development and tests
 
