@@ -81,3 +81,7 @@ The macOS appearance is inspired by a plain Terminal window, not a themed shell.
 The virtual macOS filesystem distinguishes case. A real Mac's case behavior depends on its volume format. The Windows simulation ignores case for paths and command names.
 
 Native OS execution, real disk access, networking, shell variables, pipelines, wildcard expansion, symbolic links, permissions, and non-Python scripts are outside the current scope. These are documented limits, not implicit features for the next agent to build.
+
+## Viewport workspace mode
+
+Click **Full screen** in the workspace toolbar to show just the shell and GUI across the web viewport. **Exit full screen** stays in the terminal title bar and restores the normal page and previous scroll position. Escape also exits unless a dialog is open or the editor consumes it to close its file first. Files, cwd, logs, open editor and Python runs are preserved. This is a transient CSS viewport mode, not a browser/OS fullscreen request, so it needs no permissions and keeps browser chrome available. Desktop panels stay side by side; narrow layouts split the viewport vertically.

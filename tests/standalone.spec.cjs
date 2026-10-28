@@ -31,6 +31,10 @@ for (const mode of ["mac", "windows"]) {
         await page.locator("#command-input").fill(text);
         await page.locator("#command-input").press("Enter");
       };
+      if (await page.locator("html").getAttribute("data-theme") !== "dark") await page.locator("#theme-toggle").click();
+      await page.locator("#workspace-expand").click();
+      await expect(page.locator(".intro")).toBeHidden();
+      await expect(page.locator("#workspace-collapse")).toBeVisible();
       await command("python hello_world.py");
       await expect(page.locator("#python-stop")).toBeHidden({timeout:60000});
       await expect(page.locator("#terminal-output")).toContainText("Hello, world!");
@@ -55,7 +59,6 @@ for (const mode of ["mac", "windows"]) {
         .click();
       await page.locator("#restore-file").click();
       await expect(page.locator("#text-app")).toBeVisible();
-      await page.locator("#theme-toggle").click();
       await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
       await page.locator("#close-file").click();
       await command("mv note.txt program.py");
@@ -83,6 +86,8 @@ for (const mode of ["mac", "windows"]) {
       await expect(page.locator("#preview-content")).toHaveValue(
         "<script>alert(1)</script>\n",
       );
+      // Reload returns to normal mode; expand again to verify mobile bounds.
+      await page.locator("#workspace-expand").click();
       await page.setViewportSize({width:390, height:844});
       const contained = await page.evaluate(() => {
         const app = document.querySelector("#text-app").getBoundingClientRect();
@@ -91,6 +96,13 @@ for (const mode of ["mac", "windows"]) {
           document.documentElement.scrollWidth <= innerWidth;
       });
       expect(contained).toBe(true);
+      const viewport = await page.locator(".workspace").boundingBox();
+      expect(viewport.x).toBe(0);
+      expect(viewport.y).toBe(0);
+      expect(viewport.width).toBe(390);
+      expect(viewport.height).toBe(844);
+      await page.locator("#workspace-collapse").click();
+      await expect(page.locator(".intro")).toBeVisible();
       expect(
         requests.every(
           (url) => url === pathToFileURL(file).href || (url.startsWith("data:") || url.startsWith("blob:")),

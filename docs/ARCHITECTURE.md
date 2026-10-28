@@ -183,3 +183,7 @@ The root `data-platform` (`mac`/`windows`) and `data-theme` (`light`/`dark`) att
 `styles.css` contains original rules followed by later readability/platform overrides. The final document-window rules position `#text-app` absolutely inside relatively positioned `.explorer-pane`. Some unused selectors from removed learning cards remain; their presence does not mean the feature is active.
 
 The engine has no host access. The app uses `textContent` for untrusted strings. Trusted SVG templates alone use `innerHTML`. The modular CSP permits local scripts/styles, blob workers/scripts and WebAssembly compilation, and blocks connections. Standalone embeds scripts/styles authorized by exact SHA-256 hashes. The Python worker handles runtime fetches from embedded memory; no network API, analytics, or real shell bridge is part of this design.
+
+## Viewport mode state
+
+`setWorkspaceExpanded()` toggles `body.workspace-expanded`. Its `workspaceExpanded` and `normalScrollY` variables are transient and are not part of persisted sessions. The normal toolbar contains `workspace-expand`; the terminal bar contains `workspace-collapse`, keeping exit available even when the editor covers the GUI. Enter/exit restore useful focus. Final CSS overrides use a fixed workspace and `100dvh` with a `100vh` fallback; pane content scrolls independently. Hidden page sections leave the accessibility/tab order via display:none. Dialogs keep their top-layer behavior; toasts appear above the expanded workspace. No Fullscreen API is used.

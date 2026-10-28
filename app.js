@@ -1070,6 +1070,25 @@
       closeDocument();
     }
   });
+  let workspaceExpanded = false, normalScrollY = 0;
+  function setWorkspaceExpanded(expanded) {
+    if (expanded === workspaceExpanded) return;
+    if (expanded) normalScrollY = window.scrollY;
+    workspaceExpanded = expanded;
+    document.body.classList.toggle("workspace-expanded", expanded);
+    $("workspace-expand").setAttribute("aria-pressed", String(expanded));
+    $("workspace-collapse").hidden = !expanded;
+    (expanded ? $("workspace-collapse") : $("workspace-expand")).focus({preventScroll:true});
+    if (!expanded) window.scrollTo(0, normalScrollY);
+  }
+  $("workspace-expand").addEventListener("click", () => setWorkspaceExpanded(true));
+  $("workspace-collapse").addEventListener("click", () => setWorkspaceExpanded(false));
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !event.defaultPrevented && workspaceExpanded && !document.querySelector("dialog[open]")) {
+      event.preventDefault();
+      setWorkspaceExpanded(false);
+    }
+  });
   $("reference-open").addEventListener("click", openReference);
   $("reference-search").addEventListener("input", renderReference);
   document

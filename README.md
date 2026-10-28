@@ -60,6 +60,9 @@ Run `python hello_world.py` from home. Open **Python Examples** for eight beginn
 
 ## Features
 
+- **Full screen** shows only the terminal and GUI across the web viewport; **Exit full screen** returns to the normal page. The current files and editor are preserved.
+
+
 - Local Python execution (`python`, `python3`, `py`) with relative/absolute script paths and a native-style, auto-saving text editor shared by notes and code, with Ctrl/Cmd+S and Python syntax highlighting. See [usage and limitations](docs/PYTHON.md).
 - English interface, command reference, explanations, errors, and sample files.
 - Separate macOS / zsh and Windows / PowerShell practice sessions, both using the username `user`.

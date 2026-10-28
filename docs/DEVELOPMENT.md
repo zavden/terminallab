@@ -12,7 +12,6 @@ The app has no production dependency installation or build step. To develop with
 ```sh
 npm ci
 npm test
-npm run build:standalone
 npx playwright install chromium
 npm run test:ui
 ```
@@ -215,3 +214,7 @@ When handing off a change, state what changed, what verification actually ran, a
 `npm run test:standalone` runs two OS modes in each of Chrome, Firefox and WebKit (six tests). Install the Playwright browsers and required OS libraries first; use `CHROME_PATH` for an installed Chrome executable. The tests copy only the HTML into a new directory, set the browser offline, run relative/absolute Python scripts, supply input, write virtual files, edit/save with keyboard shortcuts, check highlighting, minimize/restore, reload persistence, literal HTML safety and narrow containment, and reject console errors or external requests. The normal `test:ui` command still includes standalone tests under its default Chromium configuration.
 
 The runner uses classic blob workers, keeps their URLs alive until termination, disables Pyodide's optional stack-switching integration, and serves wasm/stdlib from embedded memory. It does not require cross-origin isolation, SharedArrayBuffer or a native filesystem API. WebKit tests on Linux are engine verification, not a substitute for manually checking Safari on macOS/iOS. On the Fedora development host, missing Ubuntu-fallback ICU/JPEG test libraries were extracted into a temporary folder and linked into the Playwright cache; no such libraries are part of the app or needed by end users.
+
+### Viewport-mode checks
+
+`tests/workspace.spec.cjs` covers both platforms/themes, desktop/mobile viewport bounds, editor persistence, shortcut saving, focus restoration and Escape priority. Standalone matrix tests enter the mode, execute Python/edit files within it, and return via the exit button. After changing this layout, check normal mobile toolbar overflow as well as expanded panes and the open editor.

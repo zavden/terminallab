@@ -81,9 +81,14 @@
             <span class="toolbar-slash">/</span
             ><span id="platform-label">macOS · zsh</span>
           </div>
+          <div class="workspace-actions">
+          <button class="button quiet small" id="workspace-expand" aria-pressed="false">
+            <span data-icon="maximize"></span>Full screen
+          </button>
           <button class="button quiet small" id="reset-open">
             <span data-icon="reset"></span>Reset
           </button>
+          </div>
         </div>
         <div class="panes">
           <section class="terminal-pane" aria-labelledby="terminal-heading">
@@ -97,6 +102,9 @@
                 <span class="window-subtitle" id="shell-label">— zsh</span>
               </div>
               <span class="pane-number">01 / CLI</span>
+              <button id="workspace-collapse" class="button quiet small" hidden>
+                <span data-icon="minimize"></span>Exit full screen
+              </button>
             </div>
             <div class="terminal-content" id="terminal-scroll">
               <div id="mac-login" class="mac-login"></div>
