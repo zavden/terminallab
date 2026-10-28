@@ -134,7 +134,7 @@ Preferences are `{ platform, theme, view }`, saved along with sessions under the
 
 This example illustrates the schema only: an empty `nodes` array is not a valid snapshot. Required root/home directories must be present. Use `snapshot()` for actual fixtures.
 
-Output entries are shortened for display before saving; the full file contents remain in the filesystem. Storage reads validate preference values, history/log types, lengths, and snapshots. Storage failure leaves the running session usable in memory. Persistence scope and quota belong to the browser; modular and standalone URLs are not guaranteed to share storage.
+Command output is shortened when logged, and long Python output is shortened when saved, so saved logs stay within the size accepted on load; the full file contents remain in the filesystem. Storage reads validate preference values, history/log types, lengths, and snapshots. Storage failure leaves the running session usable in memory. Persistence scope and quota belong to the browser; modular and standalone URLs are not guaranteed to share storage.
 
 ### Migrations
 
@@ -182,7 +182,7 @@ The root `data-platform` (`mac`/`windows`) and `data-theme` (`light`/`dark`) att
 
 `styles.css` contains original rules followed by later readability/platform overrides. The final document-window rules position `#text-app` absolutely inside relatively positioned `.explorer-pane`. Some unused selectors from removed learning cards remain; their presence does not mean the feature is active.
 
-The engine has no host access. The app uses `textContent` for untrusted strings. Trusted SVG templates alone use `innerHTML`. The modular CSP permits local scripts/styles, blob workers/scripts and WebAssembly compilation, and blocks connections. Standalone embeds scripts/styles authorized by exact SHA-256 hashes. The Python worker handles runtime fetches from embedded memory; no network API, analytics, or real shell bridge is part of this design.
+The engine has no host access. The app uses `textContent` for untrusted strings. Trusted SVG templates alone use `innerHTML`. The modular CSP permits local scripts/styles, blob workers/scripts and WebAssembly compilation, and blocks connections. Standalone embeds scripts/styles authorized by exact SHA-256 hashes. The Python worker handles runtime fetches from embedded memory and removes `XMLHttpRequest`, `WebSocket` and `indexedDB` from its scope before learner code runs; no network API, analytics, or real shell bridge is part of this design.
 
 ## Viewport mode state
 

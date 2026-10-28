@@ -1,6 +1,7 @@
 const {test,expect}=require('@playwright/test');
 const {pathToFileURL}=require('node:url');
 const path=require('node:path');
+const net=require('node:net');
 const command=async(page,text)=>{await page.locator('#command-input').fill(text);await page.locator('#command-input').press('Enter');};
 for(const mode of ['mac','windows']) test(`${mode}: offline Python paths, editor, input and files`,async({page})=>{
   test.setTimeout(90000);
@@ -64,4 +65,47 @@ test('Python errors, cancellation, local imports, editor persistence and limits'
   await page.reload();
   await page.getByRole('button',{name:'View file main.py',exact:true}).dblclick();
   await expect(editor).toHaveValue(/100001/);
+});
+
+test('Python cannot reach JavaScript globals, eval, the network or IndexedDB',async({page})=>{
+  test.setTimeout(90000);
+  // Emscripten maps Python sockets to WebSockets; a local listener sees any attempt that escapes.
+  const connections=[];const server=net.createServer(socket=>{connections.push(socket.remoteAddress);socket.destroy();});
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  try {
+    await page.goto(pathToFileURL(path.resolve('index.html')).href);
+    await page.locator('#platform-mac').click();
+    await command(page,'touch sandbox.py');
+    await page.getByRole('button',{name:'View file sandbox.py',exact:true}).dblclick();
+    await page.locator('#preview-content').fill(`import pyodide_js, socket
+def js_global(): return __import__("js").fetch
+def evaluate(): return pyodide_js.toPy.constructor("return globalThis")()
+def connect(): return socket.create_connection(("127.0.0.1", ${server.address().port}), timeout=2)
+def database(): return pyodide_js.FS.filesystems.IDBFS.indexedDB().open("sandbox-probe")
+for check in (js_global, evaluate, connect, database):
+    try:
+        check()
+        print(check.__name__, "REACHABLE")
+    except Exception:
+        print(check.__name__, "blocked")
+`);
+    await page.locator('#run-python').click();
+    await expect(page.locator('#python-stop')).toBeHidden({timeout:60000});
+    const output=page.locator('#terminal-output .output-entry').last();
+    for (const name of ['js_global','evaluate','connect','database']) await expect(output).toContainText(name+' blocked');
+    await expect(output).not.toContainText('REACHABLE');
+    expect(connections).toEqual([]);
+  } finally { server.close(); }
+});
+
+test('long Python output stays in the terminal after reload',async({page})=>{
+  test.setTimeout(90000);
+  await page.goto('/');
+  await page.locator('#platform-mac').click();
+  await command(page,'echo "print(9000 * \'x\')" > long.py');
+  await command(page,'python long.py');
+  await expect(page.locator('#python-stop')).toBeHidden({timeout:60000});
+  await page.reload();
+  await expect(page.locator('#terminal-output')).toContainText('python long.py');
+  await expect(page.locator('#terminal-output')).toContainText('Output shortened');
 });

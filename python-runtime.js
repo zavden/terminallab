@@ -33,6 +33,10 @@
       const py = await loadPyodide({ indexURL: 'https://terminal-lab.invalid/',
         lockFileContents: bundle.lock, stdout: write, stderr: write,
         jsglobals: {}, enableRunUntilComplete: false });
+      // Runtime internals reachable from Python (sockets, lazy files, IDBFS) use these.
+      // CSP already blocks the network; removing them does not depend on CSP support.
+      for (const name of ['XMLHttpRequest', 'WebSocket', 'indexedDB'])
+        Object.defineProperty(self, name, { value: undefined });
       const fs = py.FS;
       for (const [name, node] of snapshot.nodes.filter(e => e[1].type === 'dir').sort((a,b) => a[0].length-b[0].length)) fs.mkdirTree(name);
       for (const [name, node] of snapshot.nodes) if (node.type === 'file') fs.writeFile(name, node.content);

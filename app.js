@@ -313,7 +313,15 @@
         data[mode] = {
           filesystem: s.shell.snapshot(),
           history: s.history,
-          logs: s.logs,
+          // Python output can exceed the log size accepted when loading.
+          logs: s.logs.map((entry) =>
+            entry.output.length > 8000
+              ? {
+                  ...entry,
+                  output: entry.output.slice(0, 7900) + "\n… Output shortened.",
+                }
+              : entry,
+          ),
         };
       }
       localStorage.setItem(STORAGE, JSON.stringify(data));
