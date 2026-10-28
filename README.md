@@ -2,19 +2,6 @@
 
 A browser-based lab for learning PowerShell and zsh by watching commands change a synchronized file explorer. The terminal sits on the left and the GUI on the right. On small screens, the panels stack vertically.
 
-## Upload this repository
-
-This folder contains the modular website and its contributor tools. The Python runtime is already included under `vendor/pyodide/`; do not omit it. No production build or installation is required. Generated standalone HTML, screenshots and installed development dependencies are excluded from Git.
-
-To push this local repository, create an empty repository on your GitHub account, then run these commands here (replace the example owner and repository):
-
-```sh
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-git push -u origin main
-```
-
-If you have not created an initial commit yet, run `git add .` and `git commit -m "Initial Terminal Lab website"` before pushing. For the hosted website, enable GitHub Pages using the steps below. Upload the contents of this directory as the repository root, rather than nesting them in an additional `repo` directory.
-
 ## Documentation for contributors and agents
 
 Start with [AGENTS.md](AGENTS.md). The detailed handoff is split into:
