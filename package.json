@@ -1,0 +1,17 @@
+{
+  "name": "terminal-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A static PowerShell and zsh learning lab with a synchronized file explorer",
+  "scripts": {
+    "test": "node --test tests/engine.test.cjs",
+    "test:ui": "playwright test",
+    "preview": "python3 -m http.server 4173 --bind 127.0.0.1",
+    "build:standalone": "node scripts/build-standalone.cjs",
+    "test:standalone": "playwright test --config playwright.standalone.config.cjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1"
+  }
+}

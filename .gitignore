@@ -1,0 +1,11 @@
+node_modules/
+playwright-report/
+test-results/
+.DS_Store
+
+# Generated distributions and local browser captures
+/standalone/
+/screenshots/
+.env
+.env.*
+!.env.example

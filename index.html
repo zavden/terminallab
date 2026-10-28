@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en" data-platform="mac" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="description"
+      content="Learn PowerShell and zsh with a practice terminal and a synchronized file explorer. Free, no installation, and no access to your real files."
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self' blob: 'wasm-unsafe-eval'; worker-src blob:; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'"
+    />
+    <title>Terminal Lab — See what your commands do</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="engine.js" defer></script>
+    <script src="python-runtime.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#command-input">Skip to terminal</a>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Terminal Lab, home"
+        ><span class="brand-mark">&gt;_</span
+        ><span
+          >terminal<span class="brand-light">lab</span
+          ><span class="brand-dot">.</span></span
+        ></a
+      >
+      <nav class="header-actions" aria-label="Tools">
+        <button class="button quiet" id="reference-open">
+          <span data-icon="book"></span><span>Command guide</span>
+        </button>
+        <span class="header-divider"></span>
+        <button
+          class="icon-button"
+          id="theme-toggle"
+          aria-label="Switch to dark theme"
+          title="Change theme"
+        >
+          <span data-icon="moon"></span>
+        </button>
+        <a class="repo-link" href="#about" aria-label="About this lab"
+          ><span data-icon="info"></span
+        ></a>
+      </nav>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <div class="eyebrow">
+            <span class="tiny-dot"></span> LESS MYSTERY. MORE PRACTICE.
+          </div>
+          <h1 id="page-title">Your terminal, <span>in plain sight.</span></h1>
+          <p>Type a command. See what changes. Simple as that.</p>
+        </div>
+        <div class="platform-picker" role="group" aria-label="Operating system">
+          <button
+            id="platform-windows"
+            data-platform-choice="windows"
+            aria-pressed="false"
+          >
+            <span data-icon="windows"></span
+            ><span>Windows<small>PowerShell</small></span>
+          </button>
+          <button
+            id="platform-mac"
+            data-platform-choice="mac"
+            aria-pressed="true"
+          >
+            <span data-icon="apple"></span><span>macOS<small>zsh</small></span>
+          </button>
+        </div>
+      </section>
+      <section class="workspace" aria-label="Interactive lab">
+        <div class="workspace-toolbar">
+          <div class="live-label">
+            <span class="tiny-dot"></span> PRACTICE SPACE
+            <span class="toolbar-slash">/</span
+            ><span id="platform-label">macOS · zsh</span>
+          </div>
+          <button class="button quiet small" id="reset-open">
+            <span data-icon="reset"></span>Reset
+          </button>
+        </div>
+        <div class="panes">
+          <section class="terminal-pane" aria-labelledby="terminal-heading">
+            <div class="window-bar terminal-bar">
+              <div class="traffic-lights" aria-hidden="true">
+                <i></i><i></i><i></i>
+              </div>
+              <div class="window-title">
+                <span data-icon="terminal"></span>
+                <h2 id="terminal-heading">Terminal</h2>
+                <span class="window-subtitle" id="shell-label">— zsh</span>
+              </div>
+              <span class="pane-number">01 / CLI</span>
+            </div>
+            <div class="terminal-content" id="terminal-scroll">
+              <div id="mac-login" class="mac-login"></div>
+              <div
+                id="terminal-output"
+                role="log"
+                aria-label="Terminal history"
+                aria-live="polite"
+                aria-relevant="additions"
+              ></div>
+              <form id="terminal-form" autocomplete="off">
+                <label id="prompt-label" for="command-input" class="prompt-path"
+                  >user@MacBook-Air ~ %</label
+                >
+                <div class="input-line">
+                  <span id="prompt-symbol" aria-hidden="true">%</span
+                  ><input
+                    id="command-input"
+                    name="command"
+                    type="text"
+                    aria-label="Terminal command"
+                    placeholder="Type a command…"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    maxlength="4096"
+                  /><button
+                    class="run-button"
+                    type="submit"
+                    title="Run command"
+                    aria-label="Run command"
+                  >
+                    <span data-icon="enter"></span>
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="terminal-footer">
+              <span
+                ><kbd>↑</kbd><kbd>↓</kbd> history
+                <span class="footer-dot">·</span> <kbd>Tab</kbd> complete</span
+              ><button id="python-input-open" title="Prepare answers for input()">Python input</button><button id="python-stop" hidden>Stop Python</button><button id="terminal-clear" title="Clear terminal (Ctrl + L)">
+                Clear <span data-icon="clear"></span>
+              </button>
+            </div>
+          </section>
+          <section class="explorer-pane" aria-labelledby="explorer-heading">
+            <div class="window-bar explorer-bar">
+              <div class="traffic-lights" aria-hidden="true">
+                <i></i><i></i><i></i>
+              </div>
+              <div class="window-title">
+                <span data-icon="folder"></span>
+                <h2 id="explorer-heading">Finder</h2>
+              </div>
+              <span class="pane-number">02 / GUI</span>
+            </div>
+            <div class="explorer-toolbar">
+              <button
+                class="icon-button"
+                id="go-back"
+                aria-label="Go back to the previous folder"
+                title="Back"
+              >
+                <span data-icon="back"></span></button
+              ><button
+                class="icon-button"
+                id="go-up"
+                aria-label="Go to the parent folder"
+                title="Go up one level"
+              >
+                <span data-icon="up"></span>
+              </button>
+              <nav id="breadcrumbs" aria-label="Current path"></nav>
+              <div class="view-switch" role="group" aria-label="Explorer view">
+                <button
+                  class="icon-button"
+                  id="grid-view"
+                  aria-label="Icon view"
+                  aria-pressed="true"
+                >
+                  <span data-icon="grid"></span></button
+                ><button
+                  class="icon-button"
+                  id="list-view"
+                  aria-label="List view"
+                  aria-pressed="false"
+                >
+                  <span data-icon="list"></span>
+                </button>
+              </div>
+            </div>
+            <div class="explorer-body">
+              <aside class="explorer-sidebar" aria-label="Shortcuts">
+                <span class="sidebar-caption">FAVORITES</span
+                ><button data-shortcut="~">
+                  <span data-icon="home"></span><span>user</span></button
+                ><button data-shortcut="~/Desktop">
+                  <span data-icon="desktop"></span><span>Desktop</span></button
+                ><button data-shortcut="~/Documents">
+                  <span data-icon="file"></span><span>Documents</span></button
+                ><button data-shortcut="~/Downloads">
+                  <span data-icon="download"></span><span>Downloads</span>
+                </button>
+                <div class="sidebar-note">
+                  <span data-icon="shield"></span
+                  ><span>Virtual files.<br />Room to experiment.</span>
+                </div>
+              </aside>
+              <div class="files-area">
+                <div class="files-heading">
+                  <h3 id="folder-title">user</h3>
+                  <label class="search-box"
+                    ><span data-icon="search"></span
+                    ><input
+                      id="file-search"
+                      type="search"
+                      placeholder="Search here"
+                      aria-label="Search this folder"
+                  /></label>
+                </div>
+                <div
+                  id="file-grid"
+                  class="file-grid"
+                  aria-label="Folder contents"
+                ></div>
+              </div>
+            </div>
+            <div class="explorer-footer">
+              <span id="file-count">5 items</span
+              ><span
+                ><span class="sync-dot"></span> Synced with the terminal</span
+              >
+            </div>
+            <section
+              id="text-app"
+              class="text-app"
+              aria-labelledby="document-window-title"
+              hidden
+            >
+              <header class="document-titlebar">
+                <div class="document-identity">
+                  <span data-icon="file"></span>
+                  <h3 id="document-window-title">Notepad</h3>
+                </div>
+                <div
+                  class="document-controls"
+                  role="group"
+                  aria-label="Document window controls"
+                >
+                  <button
+                    id="minimize-file"
+                    class="window-control minimize-control"
+                    aria-label="Minimize file"
+                    title="Minimize"
+                  >
+                    <span data-icon="minimize"></span>
+                  </button>
+                  <button
+                    id="maximize-file"
+                    class="window-control maximize-control"
+                    aria-label="Maximize file"
+                    title="Maximize"
+                    aria-pressed="false"
+                  >
+                    <span data-icon="maximize"></span>
+                  </button>
+                  <button
+                    id="close-file"
+                    class="window-control close-control"
+                    aria-label="Close file"
+                    title="Close"
+                  >
+                    <span data-icon="close"></span>
+                  </button>
+                </div>
+              </header>
+              <div class="document-toolbar">
+                <span id="preview-title" class="document-filename"></span
+                ><span id="document-format" class="document-format">Plain text</span><button id="save-file" title="Save (Ctrl or Cmd + S)">Save</button><button id="run-python">Run Python</button>
+              </div>
+              <p id="preview-path" class="document-path" hidden></p>
+              <div class="document-paper">
+                <pre id="editor-highlight" aria-hidden="true"></pre>
+                <textarea wrap="off" id="preview-content" aria-label="File editor" spellcheck="false" autocapitalize="off"></textarea>
+              </div>
+              <footer class="document-status">
+                <span id="document-count"></span
+                ><span
+                  >UTF-8 <span aria-hidden="true">·</span> <span id="save-status">Saved</span></span
+                >
+              </footer>
+            </section>
+            <button id="restore-file" class="document-restore" hidden>
+              <span data-icon="file"></span
+              ><span id="restore-file-label">Restore document</span>
+            </button>
+          </section>
+        </div>
+        <div class="connection-bar">
+          <span data-icon="link"></span
+          ><span id="connection-text"
+            >Two views of the same files. Navigate in either panel.</span
+          ><span class="local-badge"
+            ><span data-icon="shield"></span>100 % local</span
+          >
+        </div>
+      </section>
+      <footer class="site-footer" id="about">
+        <div>
+          <span class="brand-mark small-mark">&gt;_</span
+          ><span>Made to help you feel at home in the terminal.</span>
+        </div>
+        <span>Learning simulator · No installation · No server</span>
+      </footer>
+    </main>
+    <dialog
+      id="reference-dialog"
+      class="reference-dialog"
+      aria-labelledby="reference-title"
+    >
+      <div class="dialog-header">
+        <div>
+          <span class="eyebrow">KEEP THIS HANDY</span>
+          <h2 id="reference-title">A guide to get you started.</h2>
+        </div>
+        <button
+          class="icon-button"
+          data-close="reference-dialog"
+          aria-label="Close guide"
+        >
+          <span data-icon="close"></span>
+        </button>
+      </div>
+      <p class="dialog-intro">
+        One goal, two ways to write it. Click an example to place it in the
+        terminal.
+      </p>
+      <label class="reference-search search-box"
+        ><span data-icon="search"></span
+        ><input
+          type="search"
+          id="reference-search"
+          placeholder="Search for a command or an action…"
+          aria-label="Search commands"
+      /></label>
+      <div id="reference-list"></div>
+      <div class="reference-note">
+        <strong>A lab for the essentials.</strong>
+        <p>
+          Simulates individual commands and redirections <code>&gt;</code> and
+          <code>&gt;&gt;</code>. Python scripts run locally. Other programs, shell scripts, pipes, shell variables, and network connections are not supported. Output is simplified for
+          learning; this is not a full shell.
+        </p>
+        <p>
+          File names in this lab’s macOS mode are case-sensitive. On a real Mac,
+          this depends on the disk format.
+        </p>
+        <p>
+          Read the documentation for
+          <a
+            href="https://learn.microsoft.com/powershell/module/microsoft.powershell.management/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >PowerShell</a
+          >
+          and
+          <a
+            href="https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            >zsh</a
+          >.
+        </p>
+      </div>
+    </dialog>
+    <dialog
+      id="reset-dialog"
+      class="reset-dialog"
+      aria-labelledby="reset-title"
+    >
+      <div class="dialog-header">
+        <h2 id="reset-title">Start fresh?</h2>
+        <button
+          class="icon-button"
+          data-close="reset-dialog"
+          aria-label="Cancel reset"
+        >
+          <span data-icon="close"></span>
+        </button>
+      </div>
+      <p>
+        This restores the sample files and history for the selected system. Your
+        practice in the other system is preserved.
+      </p>
+      <div class="dialog-actions">
+        <button class="button" data-close="reset-dialog">Cancel</button
+        ><button class="button primary" id="reset-confirm">
+          Reset practice
+        </button>
+      </div>
+    </dialog>
+    <dialog id="python-input-dialog" class="reset-dialog" aria-labelledby="python-input-title">
+      <div class="dialog-header"><h2 id="python-input-title">Python input</h2><button class="button" data-close="python-input-dialog">Done</button></div>
+      <p>Prepare one answer per line for input(). Each run starts at the first line. When these answers run out, Python receives end-of-input.</p>
+      <label for="python-stdin">Answers for the next run</label>
+      <textarea id="python-stdin" rows="6" spellcheck="false"></textarea>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
